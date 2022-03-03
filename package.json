@@ -1,0 +1,31 @@
+{
+  "name": "Projeto_15_Boardcamp",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThiagoWirz/Boardcamp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThiagoWirz/Boardcamp/issues"
+  },
+  "homepage": "https://github.com/ThiagoWirz/Boardcamp#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "joi": "^17.6.0",
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
