@@ -24,7 +24,7 @@ export default async function validateGame(req, res, next) {
     ]);
 
     if (category.rowCount === 0) {
-      return res.sendStatus(404);
+      return res.sendStatus(400);
     }
 
     if (sameName.rowCount > 0) {
