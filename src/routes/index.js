@@ -1,8 +1,8 @@
 import { Router } from "express";
-import categoreiesRouter from "./categoriesRouter.js";
+import categoriesRouter from "./categoriesRouter.js";
 
 const router = Router();
 
-router.use(categoreiesRouter);
+router.use(categoriesRouter);
 
 export default router;
