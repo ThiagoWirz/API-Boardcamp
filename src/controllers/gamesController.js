@@ -5,11 +5,13 @@ export async function getGames(req, res) {
 
   try {
     if (!name) {
-      const { rows: games } = await db.query("SELECT * FROM games");
+      const { rows: games } = await db.query(
+        'SELECT g.*, c.name as "categoryName"  FROM games g JOIN categories c ON g."categoryId" = c.id'
+      );
       return res.send(games);
     }
     const { rows: games } = await db.query(
-      "SELECT * FROM games WHERE LOWER (name) LIKE LOWER($1)",
+      'SELECT g.*, c.name AS "categoryName" FROM games g WHERE LOWER (name) LIKE LOWER($1) JOIN categories c ON g."categoryId" = c.id',
       [`${name}%`]
     );
     res.send(games);
