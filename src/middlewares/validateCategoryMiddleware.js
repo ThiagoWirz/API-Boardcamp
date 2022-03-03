@@ -1,6 +1,6 @@
-import db from "../db";
+import db from "../db.js";
 
-export async function validateCategoty(req, res, next) {
+export async function validateCategory(req, res, next) {
   const { name } = req.body;
 
   if (!name) {
