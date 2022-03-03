@@ -8,16 +8,24 @@ export default async function validateGame(req, res, next) {
     return res.sendStatus(422);
   }
 
-  const { name, stockTotal, pricePerDay } = req.body;
+  const { name, stockTotal, pricePerDay, categoryId } = req.body;
 
   if (parseInt(stockTotal) <= 0 || parseInt(pricePerDay) <= 0) {
     return res.sendStatus(400);
   }
 
   try {
+    const category = await db.query("SELECT id from categories WHERE id=$1", [
+      categoryId,
+    ]);
+
     const sameName = await db.query("SELECT id from games WHERE name=$1", [
       name,
     ]);
+
+    if (category.rowCount === 0) {
+      return res.sendStatus(404);
+    }
 
     if (sameName.rowCount > 0) {
       return res.sendStatus(409);
