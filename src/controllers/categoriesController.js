@@ -1,8 +1,13 @@
 import db from "../db.js";
 
 export async function getCategories(req, res) {
+  const { offset, limit } = req.query;
   try {
-    const { rows: categories } = await db.query("SELECT * FROM categories");
+    const { rows: categories } = await db.query(
+      `SELECT * FROM categories ${offset && `OFFSET ${parseInt(offset)}`} ${
+        limit && `LIMIT ${parseInt(limit)}`
+      }`
+    );
     res.send(categories);
   } catch (error) {
     console.log(error);
