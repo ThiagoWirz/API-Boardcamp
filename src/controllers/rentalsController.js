@@ -25,7 +25,11 @@ export async function getRentals(req, res) {
   };
   let orderBy = "";
   if (req.query.order && orderByFilter[req.query.order]) {
-    orderBy = `ORDER BY ${orderByFilter[req.query.order]}`;
+    if (req.query.desc) {
+      orderBy = `ORDER BY ${orderByFilter[req.query.order]} DESC`;
+    } else {
+      orderBy = `ORDER BY ${orderByFilter[req.query.order]}`;
+    }
   }
 
   try {
