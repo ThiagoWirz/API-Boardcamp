@@ -3,6 +3,7 @@ import {
   createCustomer,
   getCustomer,
   getCustomers,
+  updateCustomer,
 } from "../controllers/customersController.js";
 import {
   validateCustomer,
@@ -14,4 +15,4 @@ const customersRouter = Router();
 customersRouter.get("/customers", getCustomers);
 customersRouter.get("/customers/:id", getCustomer);
 customersRouter.post("/customers", validateCustomer, createCustomer);
-customersRouter.put("/customers/:id", validateCustomerUpdate);
+customersRouter.put("/customers/:id", validateCustomerUpdate, updateCustomer);

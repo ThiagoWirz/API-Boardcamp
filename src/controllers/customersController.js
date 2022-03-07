@@ -1,4 +1,3 @@
-import res from "express/lib/response";
 import db from "../db";
 
 export async function getCustomers(req, res) {
@@ -38,7 +37,7 @@ export async function getCustomer(req, res) {
   }
 }
 
-export async function createCustomer() {
+export async function createCustomer(req, res) {
   const { name, phone, cpf, birthday } = req.body;
   try {
     await db.query(
@@ -47,6 +46,23 @@ export async function createCustomer() {
     );
 
     res.sendStatus(201);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}
+
+export async function updateCustomer(req, res) {
+  const { id } = req.params;
+  const { name, phone, cpf, birthday } = req.body;
+
+  try {
+    await db.query(
+      "UPDATE customers SET name = $1, phone = $2, cpf = $3, birthday = $4 WHERE id = $5",
+      [name, phone, cpf, birthday, id]
+    );
+
+    res.sendStatus(200);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
