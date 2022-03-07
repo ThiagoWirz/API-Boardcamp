@@ -1,12 +1,34 @@
 import db from "../db.js";
 
 export async function getCategories(req, res) {
-  const { offset, limit } = req.query;
+  let offset = "";
+  if (req.query.offset) {
+    offset = `OFFSET ${req.query.offset}`;
+  }
+
+  let limit = "";
+  if (req.query.limit) {
+    limit = `LIMIT ${req.query.limit}`;
+  }
+
+  const orderByFilter = {
+    id: 1,
+    name: 2,
+  };
+  let orderBy = "";
+  if (req.query.order && orderByFilter[req.query.order]) {
+    if (req.query.desc) {
+      orderBy = `ORDER BY ${orderByFilter[req.query.order]} DESC`;
+    } else {
+      orderBy = `ORDER BY ${orderByFilter[req.query.order]}`;
+    }
+  }
   try {
     const { rows: categories } = await db.query(
-      `SELECT * FROM categories ${offset && `OFFSET ${parseInt(offset)}`} ${
-        limit && `LIMIT ${parseInt(limit)}`
-      }`
+      `SELECT * FROM categories 
+      ${offset}
+      ${limit}
+      ${orderBy}`
     );
     res.send(categories);
   } catch (error) {
