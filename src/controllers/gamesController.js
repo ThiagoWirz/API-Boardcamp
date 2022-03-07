@@ -1,17 +1,21 @@
 import db from "../db.js";
 
 export async function getGames(req, res) {
-  const { name } = req.query;
+  const { name, offset, limit } = req.query;
 
   try {
     if (!name) {
       const { rows: games } = await db.query(
-        'SELECT g.*, c.name as "categoryName"  FROM games g JOIN categories c ON g."categoryId" = c.id'
+        `SELECT g.*, c.name as "categoryName" FROM games g JOIN categories c ON g."categoryId" = c.id ${
+          offset && `OFFSET ${parseInt(offset)}`
+        } ${limit && `LIMIT ${parseInt(limit)}`}`
       );
       return res.send(games);
     }
     const { rows: games } = await db.query(
-      'SELECT g.*, c.name AS "categoryName" FROM games g WHERE LOWER (name) LIKE LOWER($1) JOIN categories c ON g."categoryId" = c.id',
+      `SELECT g.*, c.name AS "categoryName" FROM games g WHERE LOWER (name) LIKE LOWER($1) JOIN categories c ON g."categoryId" = c.id ${
+        offset && `OFFSET ${parseInt(offset)}`
+      } ${limit && `LIMIT ${parseInt(limit)}`}`,
       [`${name}%`]
     );
     res.send(games);
