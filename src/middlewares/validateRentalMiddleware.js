@@ -1,5 +1,5 @@
-import db from "../db";
-import rentalSchema from "../schemas/rentalSchema";
+import db from "../db.js";
+import rentalSchema from "../schemas/rentalSchema.js";
 
 export async function validateRental(req, res, next) {
   const validation = rentalSchema.validate(req.body);
@@ -16,7 +16,7 @@ export async function validateRental(req, res, next) {
   }
 
   try {
-    const game = await db.query("SELECT id FROM games WHERE id = $1", [gameId]);
+    const game = await db.query("SELECT * FROM games WHERE id = $1", [gameId]);
 
     if (game.rowCount === 0) {
       return res.sendStatus(400);

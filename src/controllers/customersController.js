@@ -1,4 +1,4 @@
-import db from "../db";
+import db from "../db.js";
 
 export async function getCustomers(req, res) {
   const { cpf } = req.query;
@@ -63,7 +63,7 @@ export async function getCustomer(req, res) {
       return res.sendStatus(404);
     }
 
-    return res.send(customer.rows);
+    res.send(customer.rows[0]);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
