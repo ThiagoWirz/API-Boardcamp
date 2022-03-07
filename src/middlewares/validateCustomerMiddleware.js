@@ -27,7 +27,11 @@ export async function validateCustomer(req, res, next) {
 }
 
 export async function validateCustomerUpdate(req, res, next) {
-  const validation = customerSchema.validate(req.body);
+  const formatBirthday = req.body.birthday.split("T")[0];
+  const validation = customerSchema.validate({
+    ...req.body,
+    birthday: formatBirthday,
+  });
 
   if (validation.error) {
     return res.sendStatus(400);
@@ -37,9 +41,10 @@ export async function validateCustomerUpdate(req, res, next) {
   const { id } = req.params;
 
   try {
-    const customer = await db.query("SELECT * FROM customers WHERE cpf = $1", [
-      cpf,
-    ]);
+    const customer = await db.query(
+      "SELECT * FROM customers WHERE cpf = $1 AND id != $2",
+      [cpf, id]
+    );
 
     if (customer.rowCount > 0 && customer.rows[0].id !== id) {
       return res.sendStatus(409);
