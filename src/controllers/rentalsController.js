@@ -1,7 +1,7 @@
 import db from "../db";
 
 export async function getRentals(req, res) {
-  const { customerId, gameId } = req.query;
+  const { inputCustomerId, inputGameId } = req.query;
 
   try {
     const { rows: rentals } = await db.query({
@@ -14,7 +14,9 @@ export async function getRentals(req, res) {
       FROM rentals r
         JOIN customers c ON r."customersId" = c.id 
         JOIN games g ON r."gameId" = g.id 
-        JOIN categories ca ON  g."categoryId" = ca.id`,
+        JOIN categories ca ON  g."categoryId" = ca.id
+      ${inputCustomerId && `WHERE c.id = ${parseInt(inputCustomerId)}`}
+      ${inputGameId && `WHERE c.id = ${parseInt(inputGameId)}`}`,
       rowMode: "array",
     });
 
