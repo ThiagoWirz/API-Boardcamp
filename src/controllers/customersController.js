@@ -1,21 +1,48 @@
 import db from "../db";
 
 export async function getCustomers(req, res) {
-  const { cpf, offset, limit } = req.query;
+  const { cpf } = req.query;
+  let offset = "";
+  if (req.query.offset) {
+    offset = `OFFSET ${req.query.offset}`;
+  }
+
+  let limit = "";
+  if (req.query.limit) {
+    limit = `LIMIT ${req.query.limit}`;
+  }
+
+  const orderByFilter = {
+    id: 1,
+    name: 2,
+    phone: 3,
+    cpf: 4,
+    birthday: 5,
+  };
+  let orderBy = "";
+  if (req.query.order && orderByFilter[req.query.order]) {
+    if (req.query.desc) {
+      orderBy = `ORDER BY ${orderByFilter[req.query.order]} DESC`;
+    } else {
+      orderBy = `ORDER BY ${orderByFilter[req.query.order]}`;
+    }
+  }
   try {
     if (!cpf) {
       const { rows: customers } = await db.query(
-        `SELECT * FROM customers ${offset && `OFFSET ${parseInt(offset)}`} ${
-          limit && `LIMIT ${parseInt(limit)}`
-        }`
+        `SELECT * FROM customers 
+        ${offset}
+        ${limit}
+        ${orderBy}`
       );
       return res.send(customers);
     }
 
     const { rows: customers } = await db.query(
-      `SELECT * FROM customers WHERE cpf LIKE ($1) ${
-        offset && `OFFSET ${parseInt(offset)}`
-      } ${limit && `LIMIT ${parseInt(limit)}`}`,
+      `SELECT * FROM customers WHERE cpf LIKE ($1)
+      ${offset}
+      ${limit}
+      ${orderBy}`,
       [`${cpf}%`]
     );
     return res.send(customers);
