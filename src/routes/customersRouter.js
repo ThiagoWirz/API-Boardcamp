@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { validateCustomer } from "../middlewares/validateCustomerMiddleware";
 
 const customersRouter = Router();
 
