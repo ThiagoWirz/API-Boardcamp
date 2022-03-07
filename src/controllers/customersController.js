@@ -1,15 +1,21 @@
 import db from "../db";
 
 export async function getCustomers(req, res) {
-  const { cpf } = req.query;
+  const { cpf, offset, limit } = req.query;
   try {
     if (!cpf) {
-      const { rows: customers } = await db.query("SELECT * FROM customers");
+      const { rows: customers } = await db.query(
+        `SELECT * FROM customers ${offset && `OFFSET ${parseInt(offset)}`} ${
+          limit && `LIMIT ${parseInt(limit)}`
+        }`
+      );
       return res.send(customers);
     }
 
     const { rows: customers } = await db.query(
-      "SELECT * FROM customers WHERE cpf LIKE ($1)",
+      `SELECT * FROM customers WHERE cpf LIKE ($1) ${
+        offset && `OFFSET ${parseInt(offset)}`
+      } ${limit && `LIMIT ${parseInt(limit)}`}`,
       [`${cpf}%`]
     );
     return res.send(customers);
