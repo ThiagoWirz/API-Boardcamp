@@ -27,11 +27,7 @@ export async function validateCustomer(req, res, next) {
 }
 
 export async function validateCustomerUpdate(req, res, next) {
-  const formatBirthday = req.body.birthday.split("T")[0];
-  const validation = customerSchema.validate({
-    ...req.body,
-    birthday: formatBirthday,
-  });
+  const validation = customerSchema.validate(req.body);
 
   if (validation.error) {
     return res.sendStatus(400);
