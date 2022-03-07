@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import db from "../db";
 
 export async function getRentals(req, res) {
-  const { inputCustomerId, inputGameId } = req.query;
+  const { inputCustomerId, inputGameId, offset, limit } = req.query;
 
   try {
     const { rows: rentals } = await db.query({
@@ -17,7 +17,10 @@ export async function getRentals(req, res) {
         JOIN games g ON r."gameId" = g.id 
         JOIN categories ca ON  g."categoryId" = ca.id
       ${inputCustomerId && `WHERE c.id = ${parseInt(inputCustomerId)}`}
-      ${inputGameId && `WHERE c.id = ${parseInt(inputGameId)}`}`,
+      ${inputGameId && `WHERE c.id = ${parseInt(inputGameId)}`}
+      ${offset && `OFFSET ${parseInt(offset)}`} ${
+        limit && `LIMIT ${parseInt(limit)}`
+      }`,
       rowMode: "array",
     });
 
