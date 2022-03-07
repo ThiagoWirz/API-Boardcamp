@@ -2,7 +2,27 @@ import dayjs from "dayjs";
 import db from "../db";
 
 export async function getRentals(req, res) {
-  const { inputCustomerId, inputGameId, offset, limit } = req.query;
+  const { inputCustomerId, inputGameId } = req.query;
+  let offset = "";
+  if (req.query.offset) {
+    offset = `OFFSET ${req.query.offset}`;
+  }
+
+  let limit = "";
+  if (req.query.limit) {
+    limit = `LIMIT ${req.query.limit}`;
+  }
+
+  const orderByFilter = {
+    id: 1,
+    nome: 2,
+    preco: 3,
+    estoque: 4,
+  };
+  let orderBy = "";
+  if (req.query.order && orderByFilter[req.query.order]) {
+    orderBy = `ORDER BY ${orderByFilter[req.query.order]}`;
+  }
 
   try {
     const { rows: rentals } = await db.query({
@@ -18,9 +38,9 @@ export async function getRentals(req, res) {
         JOIN categories ca ON  g."categoryId" = ca.id
       ${inputCustomerId && `WHERE c.id = ${parseInt(inputCustomerId)}`}
       ${inputGameId && `WHERE c.id = ${parseInt(inputGameId)}`}
-      ${offset && `OFFSET ${parseInt(offset)}`} ${
-        limit && `LIMIT ${parseInt(limit)}`
-      }`,
+      ${offset}
+      ${limit}
+      ${orderBy}`,
       rowMode: "array",
     });
 
