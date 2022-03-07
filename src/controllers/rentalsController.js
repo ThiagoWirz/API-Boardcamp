@@ -15,9 +15,13 @@ export async function getRentals(req, res) {
 
   const orderByFilter = {
     id: 1,
-    nome: 2,
-    preco: 3,
-    estoque: 4,
+    customerId: 2,
+    gameId: 3,
+    rentDate: 4,
+    daysRented: 5,
+    returnDate: 6,
+    originalPrice: 7,
+    delayFee: 8,
   };
   let orderBy = "";
   if (req.query.order && orderByFilter[req.query.order]) {
